@@ -3,12 +3,8 @@
 module calculator_tb;
 
 reg  [3:0] A, B;
-reg  [2:0] op;
+reg  [2:0] op;        // 3-bit because we added * and /
 wire [7:0] result;
-
-integer a_in;
-integer b_in;
-integer op_in;
 
 calculator uut(
     .A(A),
@@ -21,24 +17,34 @@ initial begin
     $dumpfile("calculator.vcd");
     $dumpvars(0, calculator_tb);
 
-    $display("Enter A (0-15): ");
-    $scanf("%d", a_in);
-    A = a_in;
+    // ADD
+    A = 10; B = 4; op = 3'b000; #10;
+    $display("ADD  : %d", result);
 
-    $display("Enter B (0-15): ");
-    $scanf("%d", b_in);
-    B = b_in;
+    // SUB
+    A = 10; B = 4; op = 3'b001; #10;
+    $display("SUB  : %d", result);
 
-    $display("Enter operation:");
-    $display("0=ADD,1=SUB,2=AND,3=OR,4=MUL,5=DIV");
-    $scanf("%d", op_in);
-    op = op_in;
+    // AND
+    A = 10; B = 4; op = 3'b010; #10;
+    $display("AND  : %d", result);
 
-    #10;
+    // OR
+    A = 10; B = 4; op = 3'b011; #10;
+    $display("OR   : %d", result);
 
-    $display("Result = %d", result);
+    // MUL
+    A = 6; B = 3; op = 3'b100; #10;
+    $display("MUL  : %d", result);
 
-    #10;
+    // DIV
+    A = 8; B = 2; op = 3'b101; #10;
+    $display("DIV  : %d", result);
+
+    // DIV by zero
+    A = 8; B = 0; op = 3'b101; #10;
+    $display("DIV0 : %d (Error case)", result);
+
     $finish;
 end
 
